@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "eujap.fullname" . }}-backend
+  name: {{ include "eu-jap-hack.fullname" . }}-backend
   labels:
-    {{- include "eujap.labels" . | nindent 4 }}
+    {{- include "eu-jap-hack.labels" . | nindent 4 }}
     app.kubernetes.io/component: backend
 spec:
   replicas: {{ .Values.backend.replicaCount }}
@@ -24,7 +24,7 @@ spec:
       {{- end }}
       containers:
         - name: backend
-          image: {{ include "eujap.image" (dict "global" .Values.global "image" .Values.backend.image) }}
+          image: {{ include "eu-jap-hack.image" (dict "global" .Values.global "image" .Values.backend.image) }}
           imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
           ports:
             - containerPort: 8000
@@ -38,7 +38,7 @@ spec:
             {{- end }}
           envFrom:
             - secretRef:
-                name: {{ include "eujap.fullname" . }}-backend-secret
+                name: {{ include "eu-jap-hack.fullname" . }}-backend-secret
                 optional: true
           livenessProbe:
             httpGet:

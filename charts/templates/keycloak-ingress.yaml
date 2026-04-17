@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "eujap.fullname" . }}-keycloak
+  name: {{ include "eu-jap-hack.fullname" . }}-keycloak
   labels:
-    {{- include "eujap.labels" . | nindent 4 }}
+    {{- include "eu-jap-hack.labels" . | nindent 4 }}
     app.kubernetes.io/component: keycloak
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
@@ -18,7 +18,7 @@ spec:
   tls:
     - hosts:
         - {{ .Values.keycloak.ingress.host }}
-      secretName: {{ include "eujap.fullname" . }}-keycloak-tls
+      secretName: {{ include "eu-jap-hack.fullname" . }}-keycloak-tls
   {{- end }}
   rules:
     - host: {{ .Values.keycloak.ingress.host }}
@@ -28,7 +28,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "eujap.fullname" . }}-keycloak
+                name: {{ include "eu-jap-hack.fullname" . }}-keycloak
                 port:
                   number: {{ .Values.keycloak.service.port }}
 {{- end }}

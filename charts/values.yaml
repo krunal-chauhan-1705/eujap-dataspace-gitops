@@ -13,7 +13,7 @@ tls:
 backend:
   replicaCount: 1
   image:
-    repository: eujap/backend
+    repository: eu-jap-hack/backend
     tag: "1.0.41"
     pullPolicy: Always
   service:
@@ -21,11 +21,11 @@ backend:
   ingress:
     host: "jeh-api.dataspace.smartsenselabs.com"
   env:
-    DATABASE_URL: "postgresql://<path:k8s-stack/data/eujap/backend#dbuser>:<path:k8s-stack/data/eujap/backend#dbpass>@<path:k8s-stack/data/eujap/backend#dbhost>:5432/<path:k8s-stack/data/eujap/backend#dbname>"
+    DATABASE_URL: "postgresql://<path:k8s-stack/data/eujap/backend#dbuser>:<path:k8s-stack/data/eu-jap-hack/backend#dbpass>@<path:k8s-stack/data/eujap/backend#dbhost>:5432/<path:k8s-stack/data/eujap/backend#dbname>"
     ENABLE_EDC: "true"
     AUTH_ENABLED: "false"
     KEYCLOAK_URL: "https://auth.dataspace.smartsenselabs.com"
-    KEYCLOAK_REALM: "eujap"
+    KEYCLOAK_REALM: "eu-jap-hack"
     KEYCLOAK_ADMIN_CLIENT_ID: "realm_admin_client"
     KEYCLOAK_ADMIN_CLIENT_SECRET: "<path:k8s-stack/data/eujap/backend#admin-client-secret>"
     ENABLE_EDC_PROVISIONING: "true"
@@ -46,10 +46,10 @@ backend:
     CADDE_ASSET_ID: "asset_7"
     CADDE_PARTNER_EDC_DSP_URL: "https://toyota-protocol.dataspace.smartsenselabs.com/api/v1/dsp"
     CADDE_PARTNER_EDC_BPN: "BPNL00000000024R"
-    PROVISIONING_SERVICE_URL: "http://eujap-provisioning:3001"
-    WALTID_ISSUER_URL: "http://eujap-waltid-issuer:7002"
-    WALTID_WALLET_URL: "http://eujap-waltid-wallet:7001"
-    WALTID_VERIFIER_URL: "http://eujap-waltid-verifier:7003"
+    PROVISIONING_SERVICE_URL: "http://eu-jap-hack-provisioning:3001"
+    WALTID_ISSUER_URL: "http://eu-jap-hack-waltid-issuer:7002"
+    WALTID_WALLET_URL: "http://eu-jap-hack-waltid-wallet:7001"
+    WALTID_VERIFIER_URL: "http://eu-jap-hack-waltid-verifier:7003"
   resources:
     requests:
       cpu: 10m
@@ -62,7 +62,7 @@ keycloak:
   enabled: true
   replicaCount: 1
   image:
-    repository: eujap/keycloak
+    repository: eu-jap-hack/keycloak
     tag: "1.0.41"
     pullPolicy: Always
   adminUsername: admin
@@ -242,11 +242,11 @@ provisioning:
     VAULT_ADDR: "https://vault.the-sense.io"
     VAULT_TOKEN: "<path:k8s-stack/data/eujap/provisioning#vault-provisioning-token>"
     GIT_REPO_PATH: "/repo"
-    GIT_REMOTE_URL: "https://github.com/krunal-chauhan-1705/eujap-dataspace-gitops.git"
+    GIT_REMOTE_URL: "https://github.com/krunal-chauhan-1705/eu-jap-hack-dataspace-gitops.git"
     GIT_AUTH_TOKEN: "<path:k8s-stack/data/eujap/provisioning#github-provisioning-pat>"
     GIT_USER_NAME: "edc-provisioning-bot"
     GIT_USER_EMAIL: "edc-provisioning@the-sense.io"
-    GIT_REPO_URL: "https://github.com/krunal-chauhan-1705/eujap-dataspace-gitops.git"
+    GIT_REPO_URL: "https://github.com/krunal-chauhan-1705/eu-jap-hack-dataspace-gitops.git"
     ARGOCD_SERVER_URL: ""
     ARGOCD_AUTH_TOKEN: ""
     CALLBACK_MAX_RETRIES: "10"

@@ -2,9 +2,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "eujap.fullname" . }}-keycloak
+  name: {{ include "eu-jap-hack.fullname" . }}-keycloak
   labels:
-    {{- include "eujap.labels" . | nindent 4 }}
+    {{- include "eu-jap-hack.labels" . | nindent 4 }}
     app.kubernetes.io/component: keycloak
 spec:
   replicas: {{ .Values.keycloak.replicaCount }}
@@ -25,7 +25,7 @@ spec:
       {{- end }}
       containers:
         - name: keycloak
-          image: {{ include "eujap.image" (dict "global" .Values.global "image" .Values.keycloak.image) }}
+          image: {{ include "eu-jap-hack.image" (dict "global" .Values.global "image" .Values.keycloak.image) }}
           imagePullPolicy: {{ .Values.keycloak.image.pullPolicy }}
           ports:
             - containerPort: 8080
@@ -47,7 +47,7 @@ spec:
               value: {{ .Values.keycloak.db.url | quote }}
           envFrom:
             - secretRef:
-                name: {{ include "eujap.fullname" . }}-keycloak-secret
+                name: {{ include "eu-jap-hack.fullname" . }}-keycloak-secret
           resources:
             {{- toYaml .Values.keycloak.resources | nindent 12 }}
 {{- end }}

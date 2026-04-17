@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "eujap.fullname" . }}-backend
+  name: {{ include "eu-jap-hack.fullname" . }}-backend
   labels:
-    {{- include "eujap.labels" . | nindent 4 }}
+    {{- include "eu-jap-hack.labels" . | nindent 4 }}
     app.kubernetes.io/component: backend
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
@@ -18,7 +18,7 @@ spec:
   tls:
     - hosts:
         - {{ .Values.backend.ingress.host }}
-      secretName: {{ include "eujap.fullname" . }}-backend-tls
+      secretName: {{ include "eu-jap-hack.fullname" . }}-backend-tls
   {{- end }}
   rules:
     - host: {{ .Values.backend.ingress.host }}
@@ -28,7 +28,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "eujap.fullname" . }}-backend
+                name: {{ include "eu-jap-hack.fullname" . }}-backend
                 port:
                   number: {{ .Values.backend.service.port }}
 {{- end }}

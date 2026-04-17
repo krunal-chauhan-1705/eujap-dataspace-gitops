@@ -1,14 +1,14 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "eujap.name" -}}
+{{- define "eu-jap-hack.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Create a default fully qualified app name.
 */}}
-{{- define "eujap.fullname" -}}
+{{- define "eu-jap-hack.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -24,16 +24,16 @@ Create a default fully qualified app name.
 {{/*
 Common labels
 */}}
-{{- define "eujap.labels" -}}
-helm.sh/chart: {{ include "eujap.name" . }}
+{{- define "eu-jap-hack.labels" -}}
+helm.sh/chart: {{ include "eu-jap-hack.name" . }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-app.kubernetes.io/part-of: eujap
+app.kubernetes.io/part-of: eu-jap-hack
 {{- end }}
 
 {{/*
 Selector labels for a component
 */}}
-{{- define "eujap.selectorLabels" -}}
+{{- define "eu-jap-hack.selectorLabels" -}}
 app.kubernetes.io/name: {{ .name }}
 app.kubernetes.io/instance: {{ .release }}
 {{- end }}
@@ -41,7 +41,7 @@ app.kubernetes.io/instance: {{ .release }}
 {{/*
 Image helper
 */}}
-{{- define "eujap.image" -}}
+{{- define "eu-jap-hack.image" -}}
 {{- if .image.registry -}}
 {{ .image.registry }}/{{ .image.repository }}:{{ .image.tag }}
 {{- else if .global.imageRegistry -}}

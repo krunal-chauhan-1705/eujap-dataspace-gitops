@@ -11,9 +11,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "eujap.fullname" $ }}-{{ $name }}
+  name: {{ include "eu-jap-hack.fullname" $ }}-{{ $name }}
   labels:
-    {{- include "eujap.labels" $ | nindent 4 }}
+    {{- include "eu-jap-hack.labels" $ | nindent 4 }}
     app.kubernetes.io/component: {{ $name }}
 spec:
   replicas: {{ $val.replicaCount }}
@@ -34,7 +34,7 @@ spec:
       {{- end }}
       containers:
         - name: {{ $name }}
-          image: {{ include "eujap.image" (dict "global" $.Values.global "image" $val.image) }}
+          image: {{ include "eu-jap-hack.image" (dict "global" $.Values.global "image" $val.image) }}
           imagePullPolicy: {{ $val.image.pullPolicy }}
           env:
             {{- range $key, $value := $val.env }}
