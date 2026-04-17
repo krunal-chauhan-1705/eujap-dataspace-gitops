@@ -1,0 +1,45 @@
+{{- $portals := dict
+  "portal-dataspace" .Values.portalDataspace
+  "portal-tata-admin" .Values.portalTataAdmin
+  "portal-tata-public" .Values.portalTataPublic
+  "portal-wallet" .Values.portalWallet
+  "portal-insurance" .Values.portalInsurance
+  "portal-company" .Values.portalCompany
+}}
+{{- range $name, $val := $portals }}
+{{- if $val.ingress.host }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "eujap.fullname" $ }}-{{ $name }}
+  labels:
+    {{- include "eujap.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $name }}
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    {{- if $.Values.tls.enabled }}
+    cert-manager.io/cluster-issuer: {{ $.Values.tls.clusterIssuer | quote }}
+    {{- end }}
+spec:
+  ingressClassName: {{ $.Values.ingressClassName }}
+  {{- if $.Values.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ $val.ingress.host }}
+      secretName: {{ include "eujap.fullname" $ }}-{{ $name }}-tls
+  {{- end }}
+  rules:
+    - host: {{ $val.ingress.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "eujap.fullname" $ }}-{{ $name }}
+                port:
+                  number: {{ $val.service.port }}
+{{- end }}
+{{- end }}

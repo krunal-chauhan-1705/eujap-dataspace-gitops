@@ -1,0 +1,61 @@
+{{- $portals := dict
+  "portal-dataspace" .Values.portalDataspace
+  "portal-tata-admin" .Values.portalTataAdmin
+  "portal-tata-public" .Values.portalTataPublic
+  "portal-wallet" .Values.portalWallet
+  "portal-insurance" .Values.portalInsurance
+  "portal-company" .Values.portalCompany
+}}
+{{- range $name, $val := $portals }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "eujap.fullname" $ }}-{{ $name }}
+  labels:
+    {{- include "eujap.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $name }}
+spec:
+  replicas: {{ $val.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $name }}
+      app.kubernetes.io/instance: {{ $.Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ $name }}
+        app.kubernetes.io/instance: {{ $.Release.Name }}
+        app.kubernetes.io/component: {{ $name }}
+    spec:
+      {{- with $.Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ $name }}
+          image: {{ include "eujap.image" (dict "global" $.Values.global "image" $val.image) }}
+          imagePullPolicy: {{ $val.image.pullPolicy }}
+          env:
+            {{- range $key, $value := $val.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          resources:
+            {{- toYaml $val.resources | nindent 12 }}
+{{- end }}

@@ -1,5 +1,5 @@
 apiVersion: v2
-name: eu-jap-hack
+name: eujap
 description: EU-Japan Hackathon 2026 - Dataspace Application
 type: application
 version: 0.1.0

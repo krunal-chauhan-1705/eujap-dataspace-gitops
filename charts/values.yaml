@@ -10,11 +10,59 @@ tls:
   enabled: true
   clusterIssuer: letsencrypt-prod
 
+backend:
+  replicaCount: 1
+  image:
+    repository: eujap/backend
+    tag: "1.0.41"
+    pullPolicy: Always
+  service:
+    port: 8000
+  ingress:
+    host: "jeh-api.dataspace.smartsenselabs.com"
+  env:
+    DATABASE_URL: "postgresql://<path:k8s-stack/data/eujap/backend#dbuser>:<path:k8s-stack/data/eujap/backend#dbpass>@<path:k8s-stack/data/eujap/backend#dbhost>:5432/<path:k8s-stack/data/eujap/backend#dbname>"
+    ENABLE_EDC: "true"
+    AUTH_ENABLED: "false"
+    KEYCLOAK_URL: "https://auth.dataspace.smartsenselabs.com"
+    KEYCLOAK_REALM: "eujap"
+    KEYCLOAK_ADMIN_CLIENT_ID: "realm_admin_client"
+    KEYCLOAK_ADMIN_CLIENT_SECRET: "<path:k8s-stack/data/eujap/backend#admin-client-secret>"
+    ENABLE_EDC_PROVISIONING: "true"
+    MAX_COMPANIES: "20"
+    GAIAX_DID_DOMAIN: "jeh-api.dataspace.smartsenselabs.com"
+    GAIAX_DID_PATH: "v15"
+    EDC_BASE_URL: "https://toyota-controlplane.dataspace.smartsenselabs.com"
+    EDC_API_KEY: "tata-motors"
+    BPN_NUMBER: "BPNL00000000024R"
+    APP_BASE_URL: "https://jeh-api.dataspace.smartsenselabs.com"
+    EDC_ACCESS_POLICY_ID: "policy_2"
+    EDC_CONTRACT_POLICY_ID: "policy_2"
+    EDC_CONSUMER_MANAGEMENT_URL: "https://nissan-motors-controlplane.dataspace.smartsenselabs.com/management"
+    EDC_CONSUMER_API_KEY: "nissan-motors"
+    EDC_NEGOTIATION_INITIAL_DELAY_MS: "5000"
+    EDC_NEGOTIATION_POLL_INTERVAL_MS: "5000"
+    EDC_NEGOTIATION_MAX_RETRIES: "3"
+    CADDE_ASSET_ID: "asset_7"
+    CADDE_PARTNER_EDC_DSP_URL: "https://toyota-protocol.dataspace.smartsenselabs.com/api/v1/dsp"
+    CADDE_PARTNER_EDC_BPN: "BPNL00000000024R"
+    PROVISIONING_SERVICE_URL: "http://eujap-provisioning:3001"
+    WALTID_ISSUER_URL: "http://eujap-waltid-issuer:7002"
+    WALTID_WALLET_URL: "http://eujap-waltid-wallet:7001"
+    WALTID_VERIFIER_URL: "http://eujap-waltid-verifier:7003"
+  resources:
+    requests:
+      cpu: 10m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
 keycloak:
   enabled: true
   replicaCount: 1
   image:
-    repository: eu-jap-hack/keycloak
+    repository: eujap/keycloak
     tag: "1.0.41"
     pullPolicy: Always
   adminUsername: admin
@@ -34,3 +82,144 @@ keycloak:
     limits:
       cpu: 1000m
       memory: 1Gi
+
+# =============================================================================
+# Frontend Portals
+# =============================================================================
+portalDataspace:
+  replicaCount: 1
+  image:
+    repository: eu-jap-hack/portal-dataspace
+    tag: "1.0.41"
+    pullPolicy: Always
+  service:
+    port: 80
+  ingress:
+    host: "jeh-dataspace.dataspace.smartsenselabs.com"
+  env:
+    VITE_KEYCLOAK_URL: "https://auth.dataspace.smartsenselabs.com"
+    VITE_KEYCLOAK_REALM: "eu-jap-hack"
+    VITE_API_BASE_URL: "https://jeh-api.dataspace.smartsenselabs.com/api"
+    VITE_PORTAL_COMPANY_URL: "https://jeh-company.dataspace.smartsenselabs.com"
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+portalTataAdmin:
+  replicaCount: 1
+  image:
+    repository: eu-jap-hack/portal-tata-admin
+    tag: "1.0.41"
+    pullPolicy: Always
+  service:
+    port: 80
+  ingress:
+    host: "jeh-admin.dataspace.smartsenselabs.com"
+  env:
+    VITE_KEYCLOAK_URL: "https://auth.dataspace.smartsenselabs.com"
+    VITE_KEYCLOAK_REALM: "eu-jap-hack"
+    VITE_API_BASE_URL: "https://jeh-api.dataspace.smartsenselabs.com/api"
+    VITE_PORTAL_DATASPACE_URL: "https://jeh-dataspace.dataspace.smartsenselabs.com"
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+portalTataPublic:
+  replicaCount: 1
+  image:
+    repository: eu-jap-hack/portal-tata-public
+    tag: "1.0.41"
+    pullPolicy: Always
+  service:
+    port: 80
+  ingress:
+    host: "jeh-public.dataspace.smartsenselabs.com"
+  env:
+    VITE_KEYCLOAK_URL: "https://auth.dataspace.smartsenselabs.com"
+    VITE_KEYCLOAK_REALM: "eu-jap-hack"
+    VITE_API_BASE_URL: "https://jeh-api.dataspace.smartsenselabs.com/api"
+    VITE_PORTAL_WALLET_URL: "https://jeh-wallet.dataspace.smartsenselabs.com"
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+portalWallet:
+  replicaCount: 1
+  image:
+    repository: eu-jap-hack/portal-wallet
+    tag: "1.0.41"
+    pullPolicy: Always
+  service:
+    port: 80
+  ingress:
+    host: "jeh-wallet.dataspace.smartsenselabs.com"
+  env:
+    VITE_KEYCLOAK_URL: "https://auth.dataspace.smartsenselabs.com"
+    VITE_KEYCLOAK_REALM: "eu-jap-hack"
+    VITE_API_BASE_URL: "https://jeh-api.dataspace.smartsenselabs.com/api"
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+portalInsurance:
+  replicaCount: 1
+  image:
+    repository: eu-jap-hack/portal-insurance
+    tag: "1.0.41"
+    pullPolicy: Always
+  service:
+    port: 80
+  ingress:
+    host: "jeh-insurance.dataspace.smartsenselabs.com"
+  env:
+    VITE_KEYCLOAK_URL: "https://auth.dataspace.smartsenselabs.com"
+    VITE_KEYCLOAK_REALM: "eu-jap-hack"
+    VITE_API_BASE_URL: "https://jeh-api.dataspace.smartsenselabs.com/api"
+    VITE_PORTAL_WALLET_URL: "https://jeh-wallet.dataspace.smartsenselabs.com"
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+portalCompany:
+  replicaCount: 1
+  image:
+    repository: eu-jap-hack/portal-company
+    tag: "1.0.41"
+    pullPolicy: Always
+  service:
+    port: 80
+  ingress:
+    host: "jeh-company.dataspace.smartsenselabs.com"
+  env:
+    VITE_KEYCLOAK_URL: "https://auth.dataspace.smartsenselabs.com"
+    VITE_KEYCLOAK_REALM: "eu-jap-hack"
+    VITE_API_BASE_URL: "https://jeh-api.dataspace.smartsenselabs.com/api"
+    VITE_PORTAL_DATASPACE_URL: "https://jeh-dataspace.dataspace.smartsenselabs.com"
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+

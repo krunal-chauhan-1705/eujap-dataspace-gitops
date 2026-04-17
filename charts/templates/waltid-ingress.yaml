@@ -1,0 +1,105 @@
+{{- if .Values.waltidWalletApi.ingress.host }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "eujap.fullname" . }}-waltid-wallet
+  labels:
+    {{- include "eujap.labels" . | nindent 4 }}
+    app.kubernetes.io/component: waltid-wallet-api
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    {{- if .Values.tls.enabled }}
+    cert-manager.io/cluster-issuer: {{ .Values.tls.clusterIssuer | quote }}
+    {{- end }}
+spec:
+  ingressClassName: {{ .Values.ingressClassName }}
+  {{- if .Values.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ .Values.waltidWalletApi.ingress.host }}
+      secretName: {{ include "eujap.fullname" . }}-waltid-wallet-tls
+  {{- end }}
+  rules:
+    - host: {{ .Values.waltidWalletApi.ingress.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "eujap.fullname" . }}-waltid-wallet
+                port:
+                  number: {{ .Values.waltidWalletApi.service.port }}
+{{- end }}
+{{- if .Values.waltidIssuerApi.ingress.host }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "eujap.fullname" . }}-waltid-issuer
+  labels:
+    {{- include "eujap.labels" . | nindent 4 }}
+    app.kubernetes.io/component: waltid-issuer-api
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    {{- if .Values.tls.enabled }}
+    cert-manager.io/cluster-issuer: {{ .Values.tls.clusterIssuer | quote }}
+    {{- end }}
+spec:
+  ingressClassName: {{ .Values.ingressClassName }}
+  {{- if .Values.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ .Values.waltidIssuerApi.ingress.host }}
+      secretName: {{ include "eujap.fullname" . }}-waltid-issuer-tls
+  {{- end }}
+  rules:
+    - host: {{ .Values.waltidIssuerApi.ingress.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "eujap.fullname" . }}-waltid-issuer
+                port:
+                  number: {{ .Values.waltidIssuerApi.service.port }}
+{{- end }}
+{{- if .Values.waltidVerifierApi.ingress.host }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "eujap.fullname" . }}-waltid-verifier
+  labels:
+    {{- include "eujap.labels" . | nindent 4 }}
+    app.kubernetes.io/component: waltid-verifier-api
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    {{- if .Values.tls.enabled }}
+    cert-manager.io/cluster-issuer: {{ .Values.tls.clusterIssuer | quote }}
+    {{- end }}
+spec:
+  ingressClassName: {{ .Values.ingressClassName }}
+  {{- if .Values.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ .Values.waltidVerifierApi.ingress.host }}
+      secretName: {{ include "eujap.fullname" . }}-waltid-verifier-tls
+  {{- end }}
+  rules:
+    - host: {{ .Values.waltidVerifierApi.ingress.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "eujap.fullname" . }}-waltid-verifier
+                port:
+                  number: {{ .Values.waltidVerifierApi.service.port }}
+{{- end }}
