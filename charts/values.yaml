@@ -1,5 +1,5 @@
 global:
-  imageRegistry: ""
+  imageRegistry: "public.ecr.aws/smartsensesolutions"
   imagePullSecrets: []
 
 # -- Ingress class name (nginx)
