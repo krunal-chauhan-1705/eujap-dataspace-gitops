@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+ name: postgres
+ namespace: argocd
+spec:
+ project: default
+ source:
+   repoURL: https://github.com/krunal-chauhan-1705/eujap-dataspace-gitops.git
+   targetRevision: main
+   path: k8s-manifests/postgres
+   plugin:
+     name: argocd-vault-plugin
+     env:
+       - name: VAULT_SECRET
+         value: vault-secret
+ destination:
+   server: https://kubernetes.default.svc
+   namespace: postgres
+ syncPolicy:
+   automated:
+     prune: true
+     selfHeal: true
+   syncOptions:
+   - CreateNamespace=true
