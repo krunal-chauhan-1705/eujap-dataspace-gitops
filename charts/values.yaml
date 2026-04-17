@@ -147,13 +147,6 @@ portalTataPublic:
     VITE_KEYCLOAK_REALM: "eu-jap-hack"
     VITE_API_BASE_URL: "https://jeh-api.dataspace.smartsenselabs.com/api"
     VITE_PORTAL_WALLET_URL: "https://jeh-wallet.dataspace.smartsenselabs.com"
-  resources:
-    requests:
-      cpu: 250m
-      memory: 128Mi
-    limits:
-      cpu: 500m
-      memory: 128Mi
 
 portalWallet:
   replicaCount: 1
@@ -252,14 +245,6 @@ provisioning:
     CALLBACK_MAX_RETRIES: "10"
     CALLBACK_RETRY_DELAY_MS: "3000"
     CALLBACK_TIMEOUT_MS: "10000"
-  resources:
-    requests:
-      cpu: 250m
-      memory: 128Mi
-    limits:
-      cpu: 500m
-      memory: 256Mi
-
 # =============================================================================
 # Walt.id Services
 # =============================================================================
