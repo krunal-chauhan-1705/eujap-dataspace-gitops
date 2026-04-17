@@ -223,3 +223,99 @@ portalCompany:
       cpu: 200m
       memory: 128Mi
 
+# =============================================================================
+# EDC Provisioning Service
+# =============================================================================
+provisioning:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: eu-jap-hack/provisioning
+    tag: "1.0.41"
+    pullPolicy: Always
+  service:
+    port: 3001
+  env:
+    PORT: "3001"
+    BACKEND_URL: "http://eu-jap-hack-backend:8000/api"
+    POSTGRES_ADMIN_URL: "postgresql://<path:k8s-stack/data/eujap/postgres#postgres-admin-user>:<path:k8s-stack/data/eujap/postgres#postgres-admin-password>@postgres.postgres.svc.cluster.local:5432/postgres"
+    VAULT_ADDR: "https://vault.the-sense.io"
+    VAULT_TOKEN: "<path:k8s-stack/data/eujap/provisioning#vault-provisioning-token>"
+    GIT_REPO_PATH: "/repo"
+    GIT_REMOTE_URL: "https://github.com/krunal-chauhan-1705/eujap-dataspace-gitops.git"
+    GIT_AUTH_TOKEN: "<path:k8s-stack/data/eujap/provisioning#github-provisioning-pat>"
+    GIT_USER_NAME: "edc-provisioning-bot"
+    GIT_USER_EMAIL: "edc-provisioning@the-sense.io"
+    GIT_REPO_URL: "https://github.com/krunal-chauhan-1705/eujap-dataspace-gitops.git"
+    ARGOCD_SERVER_URL: ""
+    ARGOCD_AUTH_TOKEN: ""
+    CALLBACK_MAX_RETRIES: "10"
+    CALLBACK_RETRY_DELAY_MS: "3000"
+    CALLBACK_TIMEOUT_MS: "10000"
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 256Mi
+
+# =============================================================================
+# Walt.id Services
+# =============================================================================
+waltidWalletApi:
+  replicaCount: 1
+  image:
+    registry: docker.io
+    repository: waltid/wallet-api
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  service:
+    port: 7001
+  ingress:
+    host: "jeh-waltid-wallet.dataspace.smartsenselabs.com"
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+waltidIssuerApi:
+  replicaCount: 1
+  image:
+    registry: docker.io
+    repository: waltid/issuer-api
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  service:
+    port: 7002
+  ingress:
+    host: "jeh-waltid-issuer.dataspace.smartsenselabs.com"
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+waltidVerifierApi:
+  replicaCount: 1
+  image:
+    registry: docker.io
+    repository: waltid/verifier-api
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  service:
+    port: 7003
+  ingress:
+    host: "jeh-waltid-verifier.dataspace.smartsenselabs.com"
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
