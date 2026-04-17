@@ -21,7 +21,7 @@ backend:
   ingress:
     host: "jeh-api.dataspace.smartsenselabs.com"
   env:
-    DATABASE_URL: "postgresql://<path:k8s-stack/data/eujap/backend#dbuser>:<path:k8s-stack/data/eu-jap-hack/backend#dbpass>@<path:k8s-stack/data/eujap/backend#dbhost>:5432/<path:k8s-stack/data/eujap/backend#dbname>"
+    DATABASE_URL: "postgresql://<path:k8s-stack/data/eujap/backend#dbuser>:<path:k8s-stack/data/eujap/backend#dbpass>@<path:k8s-stack/data/eujap/backend#dbhost>:5432/<path:k8s-stack/data/eujap/backend#dbname>"
     ENABLE_EDC: "true"
     AUTH_ENABLED: "false"
     KEYCLOAK_URL: "https://auth.dataspace.smartsenselabs.com"
