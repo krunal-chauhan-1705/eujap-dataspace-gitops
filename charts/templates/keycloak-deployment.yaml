@@ -48,20 +48,6 @@ spec:
           envFrom:
             - secretRef:
                 name: {{ include "eujap.fullname" . }}-keycloak-secret
-          livenessProbe:
-            httpGet:
-              path: /health/live
-              port: 9000
-            initialDelaySeconds: 60
-            periodSeconds: 15
-            failureThreshold: 5
-          readinessProbe:
-            httpGet:
-              path: /health/ready
-              port: 9000
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            failureThreshold: 5
           resources:
             {{- toYaml .Values.keycloak.resources | nindent 12 }}
 {{- end }}
