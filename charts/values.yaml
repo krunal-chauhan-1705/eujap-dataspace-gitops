@@ -1,0 +1,36 @@
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+
+# -- Ingress class name (nginx)
+ingressClassName: nginx
+
+# -- TLS configuration via cert-manager
+tls:
+  enabled: true
+  clusterIssuer: letsencrypt-prod
+
+keycloak:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: eu-jap-hack/keycloak
+    tag: "1.0.41"
+    pullPolicy: Always
+  adminUsername: admin
+  adminPassword: "<path:k8s-stack/data/eujap/keycloak#adminpass>"
+  db:
+    url: "jdbc:postgresql://postgres.postgres:5432/auth"
+    username: "<path:k8s-stack/data/eujap/keycloak#dbuser>"
+    password: "<path:k8s-stack/data/eujap/keycloak#dbpass>"
+  service:
+    port: 8080
+  ingress:
+    host: "auth.dataspace.smartsenselabs.com"
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
