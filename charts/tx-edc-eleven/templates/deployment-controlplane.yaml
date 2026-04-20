@@ -128,8 +128,6 @@ spec:
             failureThreshold: {{ .Values.controlplane.readinessProbe.failureThreshold }}
             successThreshold: {{ .Values.controlplane.readinessProbe.successThreshold }}
           {{- end }}
-          resources:
-            {{- toYaml .Values.controlplane.resources | nindent 12 }}
           env:
           {{- if .Values.controlplane.debug.enabled }}
             - name: "JAVA_TOOL_OPTIONS"

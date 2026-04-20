@@ -127,8 +127,6 @@ spec:
             failureThreshold: {{ .Values.dataplane.readinessProbe.failureThreshold }}
             successThreshold: {{ .Values.dataplane.readinessProbe.successThreshold }}
           {{- end }}
-          resources:
-            {{- toYaml .Values.dataplane.resources | nindent 12 }}
           env:
           {{- if .Values.dataplane.debug.enabled }}
             - name: "JAVA_TOOL_OPTIONS"
