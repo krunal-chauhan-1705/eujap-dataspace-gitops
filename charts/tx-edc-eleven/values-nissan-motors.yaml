@@ -312,7 +312,7 @@ dataplane:
   replicaCount: 1
 
 postgresql:
-  jdbcUrl: "jdbc:postgresql://<path:k8s-stack/data/eujap/edc_nissan#dbhost>:5432/<path:k8s-stack/data/eujap/edc_nissan#dbname>"
+  jdbcUrl: "jdbc:postgresql://<path:k8s-stack/data/eujap/edc-nissan#dbhost>:5432/<path:k8s-stack/data/eujap/edc-nissan#dbname>"
   primary:
     persistence:
       enabled: false
@@ -320,9 +320,9 @@ postgresql:
     persistence:
       enabled: false
   auth:
-    database: "<path:k8s-stack/data/eujap/edc_nissan#dbname>"
-    username: "<path:k8s-stack/data/eujap/edc_nissan#dbuser>"
-    password: "<path:k8s-stack/data/eujap/edc_nissan#dbpass>"
+    database: "<path:k8s-stack/data/eujap/edc-nissan#dbname>"
+    username: "<path:k8s-stack/data/eujap/edc-nissan#dbuser>"
+    password: "<path:k8s-stack/data/eujap/edc-nissan#dbpass>"
 vault:
   injector:
     enabled: true
@@ -333,7 +333,7 @@ vault:
     postStart:    # must be set externally!
   hashicorp:
     url: "https://vault.the-sense.io"
-    token: "<path:k8s-stack/data/eujap/edc_nissan#vault-token>"
+    token: "<path:k8s-stack/data/eujap/edc-nissan#vault-token>"
     timeout: 30
     healthCheck:
       enabled: false
