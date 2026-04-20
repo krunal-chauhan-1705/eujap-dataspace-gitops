@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+ name: edc-nissan
+ namespace: argocd
+spec:
+ project: default
+ source:
+   repoURL: https://github.com/krunal-chauhan-1705/eujap-dataspace-gitops.git
+   targetRevision: main
+   path: charts/tx-edc-eleven
+   plugin:
+    name: argocd-vault-plugin-helm
+    env:
+      - name: VAULT_SECRET
+        value: vault-secret
+      - name: HELM_VALUES_FILE
+        value: values-nissan-motors.yaml
+ destination:
+   server: https://kubernetes.default.svc
+   namespace: default
+ syncPolicy:
+   automated:
+     prune: true
+     selfHeal: true
+   syncOptions:
+   - CreateNamespace=true

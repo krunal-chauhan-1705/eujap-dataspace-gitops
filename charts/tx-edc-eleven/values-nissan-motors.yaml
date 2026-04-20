@@ -1,0 +1,344 @@
+install:
+  postgresql: false
+  vault: false
+fullnameOverride: "tx-edc-connector-nissan-motors"
+nameOverride: "tx-edc-connector-nissan-motors"
+participant:
+  # -- BPN Number
+  id: "BPNL000000000342"
+iatp:
+  # -- Decentralized IDentifier (DID) of the connector
+  id: "did:web:portal-backend.dataspace.smartsenselabs.com:api:administration:staticdata:did:BPNL000000000342"
+  # -- Configures the trusted issuers for this runtime
+  trustedIssuers:
+    - "did:web:portal-backend.dataspace.smartsenselabs.com:api:administration:staticdata:did:BPNL00000003CRHK"
+  sts:
+    dim:
+      # -- URL where connectors can request SI tokens
+      url: https://wallet.dataspace.smartsenselabs.com/api/sts
+    oauth:
+      # -- URL where connectors can request OAuth2 access tokens for DIM access
+      token_url: https://wallet.dataspace.smartsenselabs.com/oauth/token
+      client:
+        # -- Client ID for requesting OAuth2 access token for DIM access
+        id: "BPNL000000000342"
+        # -- Alias under which the client secret is stored in the vault for requesting OAuth2 access token for DIM access
+        secret_alias: "edc-stub"
+
+controlplane:
+  image:
+    # -- Which derivate of the control plane to use. When left empty the deployment will select the correct image automatically
+    repository: "tractusx/edc-controlplane-postgresql-hashicorp-vault"
+    # -- [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) to use
+    pullPolicy: IfNotPresent
+    # -- Overrides the image tag whose default is the chart appVersion
+    tag: "0.11.0"
+  debug:
+    enabled: true
+    port: 1044
+    suspendOnStart: false
+  logs:
+    level: DEBUG
+  endpoints:
+    # -- default api for health checks, should not be added to any ingress
+    default:
+      # -- port for incoming api calls
+      port: 8080
+      # -- path for incoming api calls
+      path: /api
+    # -- data management api, used by internal users, can be added to an ingress and must not be internet facing
+    management:
+      # -- port for incoming api calls
+      port: 8081
+      # -- path for incoming api calls
+      path: /management
+      # -- authentication key, must be attached to each request as `X-Api-Key` header
+      authKey: "nissan-motors"
+      # -- if the JWKS url is set, the DelegatedAuth service will be engaged
+      jwksUrl:
+
+    # -- control api, used for internal control calls. can be added to the internal ingress, but should probably not
+    control:
+      # -- port for incoming api calls
+      port: 8083
+      # -- path for incoming api calls
+      path: /control
+    # -- dsp api, used for inter connector communication and must be internet facing
+    protocol:
+      # -- port for incoming api calls
+      port: 8084
+      # -- path for incoming api calls
+      path: /api/v1/dsp
+    # -- metrics api, used for application metrics, must not be internet facing
+    metrics:
+      # -- port for incoming api calls
+      port: 9090
+      # -- path for incoming api calls
+      path: /metrics
+    catalog:
+      # -- port for incoming catalog cache query requests
+      port: 8085
+      # -- path for incoming catalog cache query requests
+      path: /catalog
+      # -- authentication key, must be attached to each request as `X-Api-Key` header
+      authKey: "nissan-motors"
+
+  bdrs:
+    # -- Time that a cached BPN/DID resolution map is valid in seconds, default is 600 seconds (10 min)
+    cache_validity_seconds: 600
+    server:
+      # -- URL of the BPN/DID Resolution Service
+      url: https://bdrs.dataspace.smartsenselabs.com/api/directory
+  # -- configuration for the built-in federated catalog crawler
+  catalog:
+    # -- Flag to globally enable/disable the FC feature
+    enabled: false
+    crawler:
+      # -- Number of desired crawlers. Final number might be different, based on number of crawl targets
+      num:
+      # -- Period between two crawl runs in seconds. Default is 60 seconds.
+      period:
+      # -- Initial delay for the crawling to start. Leave blank for a random delay
+      initialDelay:
+      # -- File path to a JSON file containing TargetNode entries
+      targetsFile:
+  # -- configuration for policy engine
+  policy:
+    validation:
+      enabled: true
+  # -- Extra environment variables that will be pass onto deployment pods
+  env: {}
+  #  ENV_NAME: value
+
+  # -- "valueFrom" environment variable references that will be added to deployment pods. Name is templated.
+  # ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvarsource-v1-core
+  envValueFrom: {}
+  #  ENV_NAME:
+  #    configMapKeyRef:
+  #      name: configmap-name
+  #      key: value_key
+  #    secretKeyRef:
+  #      name: secret-name
+  #      key: value_key
+
+  ingresses:
+    ## Public / Internet facing Ingress
+    - enabled: true
+      # -- The hostname to be used to precisely map incoming traffic onto the underlying network service
+      hostname: "nissan-motors-protocol.dataspace.smartsenselabs.com"
+      # -- Additional ingress annotations to add
+      annotations: {}
+      # -- EDC endpoints exposed by this ingress resource
+      endpoints:
+        - protocol
+        - public
+      # -- Defines the [ingress class](https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class)  to use
+      className: "nginx"
+      # -- TLS [tls class](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) applied to the ingress resource
+      tls:
+        # -- Enables TLS on the ingress resource
+        enabled: true
+        # -- If present overwrites the default secret name
+        secretName: "edc-protocol-nissan-motors"
+      ## Adds [cert-manager](https://cert-manager.io/docs/) annotations to the ingress resource
+      certManager:
+        # -- If preset enables certificate generation via cert-manager namespace scoped issuer
+        issuer: ""
+        # -- If preset enables certificate generation via cert-manager cluster-wide issuer
+        clusterIssuer: "letsencrypt-prod"
+    ## Private / Intranet facing Ingress
+    - enabled: true
+      # -- The hostname to be used to precisely map incoming traffic onto the underlying network service
+      hostname: "nissan-motors-controlplane.dataspace.smartsenselabs.com"
+      # -- Additional ingress annotations to add
+      annotations: {}
+      # -- EDC endpoints exposed by this ingress resource
+      endpoints:
+        - management
+        - control
+      # -- Defines the [ingress class](https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class)  to use
+      className: "nginx"
+      # -- TLS [tls class](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) applied to the ingress resource
+      tls:
+        # -- Enables TLS on the ingress resource
+        enabled: true
+        # -- If present overwrites the default secret name
+        secretName: "edc-control-nissan-motors-intranet"
+      ## Adds [cert-manager](https://cert-manager.io/docs/) annotations to the ingress resource
+      certManager:
+        # -- If preset enables certificate generation via cert-manager namespace scoped issuer
+        issuer: ""
+        # -- If preset enables certificate generation via cert-manager cluster-wide issuer
+        clusterIssuer: "letsencrypt-prod"
+  # -- [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the container
+  resources:
+    limits:
+      # -- Maximum CPU limit
+      cpu: 1500m
+      # -- Maximum memory limit
+      memory: 1024Mi
+    requests:
+      # -- Initial CPU request
+      cpu: 50m
+      # -- Initial memory request
+      memory: 1024Mi
+  replicaCount: 1
+
+  url:
+    # -- Explicitly declared url for reaching the dsp api (e.g. if ingresses not used)
+    protocol: ""
+
+dataplane:
+  image:
+    # -- Which derivate of the data plane to use. when left empty the deployment will select the correct image automatically
+    repository: "tractusx/edc-dataplane-hashicorp-vault"
+    # -- [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) to use
+    pullPolicy: IfNotPresent
+    # -- Overrides the image tag whose default is the chart appVersion
+    tag: "0.11.0"
+  initContainers: []
+  debug:
+    # -- Enables java debugging mode.
+    enabled: true
+    # -- Port where the debuggee can connect to.
+    port: 1044
+    # -- Defines if the JVM should wait with starting the application until someone connected to the debugging port.
+    suspendOnStart: false
+
+  logs:
+    # -- Defines the log granularity of the default Console Monitor.
+    level: DEBUG
+
+  # -- endpoints of the dataplane
+  endpoints:
+    # -- default api for health checks, should not be added to any ingress
+    default:
+      # -- port for incoming api calls
+      port: 8080
+      # -- path for incoming api calls
+      path: /api
+    # -- public endpoint where the data can be fetched from if HttpPull was used. Must be internet facing.
+    public:
+      # -- port for incoming api calls
+      port: 8081
+      # -- path for incoming api calls
+      path: /api/public
+    # -- control api, used for internal control calls. can be added to the internal ingress, but should probably not
+    control:
+      # -- port for incoming api calls
+      port: 8084
+      # -- path for incoming api calls
+      path: /api/control
+    proxy:
+      # -- port for incoming api calls
+      port: 8186
+      # -- path for incoming api calls
+      path: /proxy
+      # -- authentication key, must be attached to each request as `X-Api-Key` header
+      authKey: "password"
+    # -- metrics api, used for application metrics, must not be internet facing
+    metrics:
+      # -- port for incoming api calls
+      port: 9090
+      # -- path for incoming api calls
+      path: /metrics
+
+  token:
+    refresh:
+      # -- TTL in seconds for access tokens (also known as EDR token)
+      expiry_seconds: 300
+      # -- Tolerance for token expiry in seconds
+      expiry_tolerance_seconds: 10
+      # -- Optional endpoint for an OAuth2 token refresh. Default endpoint is `<PUBLIC_API>/token`
+      refresh_endpoint:
+    signer:
+      # -- Alias under which the private key (JWK or PEM format) is stored in the vault
+      privatekey_alias: "private-key"
+    verifier:
+      # -- Alias under which the public key (JWK or PEM format) is stored in the vault, that belongs to the private key which was referred to at `dataplane.token.signer.privatekey_alias`
+      publickey_alias: "public-key"
+  # -- Extra environment variables that will be pass onto deployment pods
+  env: {}
+  #  ENV_NAME: value
+
+  # -- "valueFrom" environment variable references that will be added to deployment pods. Name is templated.
+  # ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvarsource-v1-core
+  envValueFrom: {}
+  #  ENV_NAME:
+  #    configMapKeyRef:
+  #      name: configmap-name
+  #      key: value_key
+  #    secretKeyRef:
+  #      name: secret-name
+  #      key: value_key
+
+  ## Ingress declaration to expose the network service.
+  ingresses:
+    ## Public / Internet facing Ingress
+    - enabled: true
+      # -- The hostname to be used to precisely map incoming traffic onto the underlying network service
+      hostname: "nissan-motors-dataplane.dataspace.smartsenselabs.com"
+      # -- Additional ingress annotations to add
+      annotations: {}
+      # -- EDC endpoints exposed by this ingress resource
+      endpoints:
+        - public
+      # -- Defines the [ingress class](https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class)  to use
+      className: "nginx"
+      # -- TLS [tls class](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) applied to the ingress resource
+      tls:
+        # -- Enables TLS on the ingress resource
+        enabled: true
+        # -- If present overwrites the default secret name
+        secretName: "edc-dataplane-nissan-motors"
+      ## Adds [cert-manager](https://cert-manager.io/docs/) annotations to the ingress resource
+      certManager:
+        # -- If preset enables certificate generation via cert-manager namespace scoped issuer
+        issuer: ""
+        # -- If preset enables certificate generation via cert-manager cluster-wide issuer
+        clusterIssuer: "letsencrypt-prod"
+  # -- [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the container
+  resources:
+    limits:
+      # -- Maximum CPU limit
+      cpu: 1500m
+      # -- Maximum memory limit
+      memory: 1024Mi
+    requests:
+      # -- Initial CPU request
+      cpu: 50m
+      # -- Initial memory request
+      memory: 1024Mi
+  replicaCount: 1
+
+postgresql:
+  jdbcUrl: "jdbc:postgresql://<path:k8s-stack/data/eujap/edc_nissan#dbhost>:5432/<path:k8s-stack/data/eujap/edc_nissan#dbname>"
+  primary:
+    persistence:
+      enabled: false
+  readReplicas:
+    persistence:
+      enabled: false
+  auth:
+    database: "<path:k8s-stack/data/eujap/edc_nissan#dbname>"
+    username: "<path:k8s-stack/data/eujap/edc_nissan#dbuser>"
+    password: "<path:k8s-stack/data/eujap/edc_nissan#dbpass>"
+vault:
+  injector:
+    enabled: true
+  server:
+    dev:
+      enabled: true
+      devRootToken: "root"
+    postStart:    # must be set externally!
+  hashicorp:
+    url: "https://vault.the-sense.io"
+    token: "<path:k8s-stack/data/eujap/edc_nissan#vault-token>"
+    timeout: 30
+    healthCheck:
+      enabled: false
+      standbyOk: false
+    paths:
+      secret: /v1/edc
+      health: /v1/sys/health
+      folder: ""
