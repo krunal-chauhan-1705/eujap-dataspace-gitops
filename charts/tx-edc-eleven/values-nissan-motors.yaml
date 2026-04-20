@@ -32,7 +32,7 @@ controlplane:
     # -- [Kubernetes image pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) to use
     pullPolicy: IfNotPresent
     # -- Overrides the image tag whose default is the chart appVersion
-    tag: "0.12.0"
+    tag: "sha256:57cf27c08256e8871debe2c11f4d558750848aa90fac50f7ec407a6cec989897"
   debug:
     enabled: true
     port: 1044
