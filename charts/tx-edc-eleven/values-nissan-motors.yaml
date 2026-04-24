@@ -171,18 +171,7 @@ controlplane:
         # -- If preset enables certificate generation via cert-manager cluster-wide issuer
         clusterIssuer: "letsencrypt-prod"
   # -- [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the container
-  resources:
-    limits:
-      # -- Maximum CPU limit
-      cpu: 1500m
-      # -- Maximum memory limit
-      memory: 1024Mi
-    requests:
-      # -- Initial CPU request
-      cpu: 50m
-      # -- Initial memory request
-      memory: 1024Mi
-  replicaCount: 0
+  replicaCount: 1
 
   url:
     # -- Explicitly declared url for reaching the dsp api (e.g. if ingresses not used)
@@ -298,18 +287,7 @@ dataplane:
         # -- If preset enables certificate generation via cert-manager cluster-wide issuer
         clusterIssuer: "letsencrypt-prod"
   # -- [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the container
-  resources:
-    limits:
-      # -- Maximum CPU limit
-      cpu: 1500m
-      # -- Maximum memory limit
-      memory: 1024Mi
-    requests:
-      # -- Initial CPU request
-      cpu: 50m
-      # -- Initial memory request
-      memory: 1024Mi
-  replicaCount: 0
+  replicaCount: 1
 
 postgresql:
   jdbcUrl: "jdbc:postgresql://<path:k8s-stack/data/eujap/edc-nissan#dbhost>:5432/<path:k8s-stack/data/eujap/edc-nissan#dbname>"
