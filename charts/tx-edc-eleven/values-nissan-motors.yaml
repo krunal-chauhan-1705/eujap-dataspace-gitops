@@ -182,7 +182,7 @@ controlplane:
       cpu: 50m
       # -- Initial memory request
       memory: 1024Mi
-  replicaCount: 1
+  replicaCount: 0
 
   url:
     # -- Explicitly declared url for reaching the dsp api (e.g. if ingresses not used)
@@ -309,7 +309,7 @@ dataplane:
       cpu: 50m
       # -- Initial memory request
       memory: 1024Mi
-  replicaCount: 1
+  replicaCount: 0
 
 postgresql:
   jdbcUrl: "jdbc:postgresql://<path:k8s-stack/data/eujap/edc-nissan#dbhost>:5432/<path:k8s-stack/data/eujap/edc-nissan#dbname>"
