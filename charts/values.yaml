@@ -50,17 +50,10 @@ backend:
     WALTID_ISSUER_URL: "http://eujap-eu-jap-hack-waltid-issuer:7002"
     WALTID_WALLET_URL: "http://eujap-eu-jap-hack-waltid-wallet:7001"
     WALTID_VERIFIER_URL: "http://eujap-eu-jap-hack-waltid-verifier:7003"
-  resources:
-    requests:
-      cpu: 10m
-      memory: 256Mi
-    limits:
-      cpu: 500m
-      memory: 512Mi
 
 keycloak:
   enabled: true
-  replicaCount: 0
+  replicaCount: 1
   image:
     repository: eu-jap-hack/keycloak
     tag: "1.0.41"
@@ -75,19 +68,12 @@ keycloak:
     port: 8080
   ingress:
     host: "auth.dataspace.smartsenselabs.com"
-  resources:
-    requests:
-      cpu: 500m
-      memory: 512Mi
-    limits:
-      cpu: 1000m
-      memory: 1Gi
 
 # =============================================================================
 # Frontend Portals
 # =============================================================================
 portalDataspace:
-  replicaCount: 0
+  replicaCount: 1
   image:
     repository: eu-jap-hack/portal-dataspace
     tag: "1.0.41"
@@ -101,16 +87,10 @@ portalDataspace:
     VITE_KEYCLOAK_REALM: "eu-jap-hack"
     VITE_API_BASE_URL: "https://jeh-api.dataspace.smartsenselabs.com/api"
     VITE_PORTAL_COMPANY_URL: "https://jeh-company.dataspace.smartsenselabs.com"
-  resources:
-    requests:
-      cpu: 50m
-      memory: 64Mi
-    limits:
-      cpu: 200m
-      memory: 128Mi
+
 
 portalTataAdmin:
-  replicaCount: 0
+  replicaCount: 1
   image:
     repository: eu-jap-hack/portal-tata-admin
     tag: "1.0.41"
@@ -124,16 +104,10 @@ portalTataAdmin:
     VITE_KEYCLOAK_REALM: "eu-jap-hack"
     VITE_API_BASE_URL: "https://jeh-api.dataspace.smartsenselabs.com/api"
     VITE_PORTAL_DATASPACE_URL: "https://jeh-dataspace.dataspace.smartsenselabs.com"
-  resources:
-    requests:
-      cpu: 50m
-      memory: 64Mi
-    limits:
-      cpu: 200m
-      memory: 128Mi
+
 
 portalTataPublic:
-  replicaCount: 0
+  replicaCount: 1
   image:
     repository: eu-jap-hack/portal-tata-public
     tag: "1.0.41"
@@ -162,16 +136,10 @@ portalWallet:
     VITE_KEYCLOAK_URL: "https://auth.dataspace.smartsenselabs.com"
     VITE_KEYCLOAK_REALM: "eu-jap-hack"
     VITE_API_BASE_URL: "https://jeh-api.dataspace.smartsenselabs.com/api"
-  resources:
-    requests:
-      cpu: 50m
-      memory: 64Mi
-    limits:
-      cpu: 200m
-      memory: 128Mi
+
 
 portalInsurance:
-  replicaCount: 0
+  replicaCount: 1
   image:
     repository: eu-jap-hack/portal-insurance
     tag: "1.0.41"
@@ -185,16 +153,10 @@ portalInsurance:
     VITE_KEYCLOAK_REALM: "eu-jap-hack"
     VITE_API_BASE_URL: "https://jeh-api.dataspace.smartsenselabs.com/api"
     VITE_PORTAL_WALLET_URL: "https://jeh-wallet.dataspace.smartsenselabs.com"
-  resources:
-    requests:
-      cpu: 50m
-      memory: 64Mi
-    limits:
-      cpu: 200m
-      memory: 128Mi
+
 
 portalCompany:
-  replicaCount: 0
+  replicaCount: 1
   image:
     repository: eu-jap-hack/portal-company
     tag: "1.0.41"
@@ -208,20 +170,13 @@ portalCompany:
     VITE_KEYCLOAK_REALM: "eu-jap-hack"
     VITE_API_BASE_URL: "https://jeh-api.dataspace.smartsenselabs.com/api"
     VITE_PORTAL_DATASPACE_URL: "https://jeh-dataspace.dataspace.smartsenselabs.com"
-  resources:
-    requests:
-      cpu: 50m
-      memory: 64Mi
-    limits:
-      cpu: 200m
-      memory: 128Mi
 
 # =============================================================================
 # EDC Provisioning Service
 # =============================================================================
 provisioning:
   enabled: true
-  replicaCount: 0
+  replicaCount: 1
   image:
     repository: eu-jap-hack/provisioning
     tag: "1.0.41"
@@ -259,16 +214,10 @@ waltidWalletApi:
     port: 7001
   ingress:
     host: "jeh-waltid-wallet.dataspace.smartsenselabs.com"
-  resources:
-    requests:
-      cpu: 100m
-      memory: 256Mi
-    limits:
-      cpu: 500m
-      memory: 512Mi
+
 
 waltidIssuerApi:
-  replicaCount: 0
+  replicaCount: 1
   image:
     registry: docker.io
     repository: waltid/issuer-api
@@ -278,16 +227,10 @@ waltidIssuerApi:
     port: 7002
   ingress:
     host: "jeh-waltid-issuer.dataspace.smartsenselabs.com"
-  resources:
-    requests:
-      cpu: 100m
-      memory: 256Mi
-    limits:
-      cpu: 500m
-      memory: 512Mi
+
 
 waltidVerifierApi:
-  replicaCount: 0
+  replicaCount: 1
   image:
     registry: docker.io
     repository: waltid/verifier-api
@@ -297,10 +240,4 @@ waltidVerifierApi:
     port: 7003
   ingress:
     host: "jeh-waltid-verifier.dataspace.smartsenselabs.com"
-  resources:
-    requests:
-      cpu: 100m
-      memory: 256Mi
-    limits:
-      cpu: 500m
-      memory: 512Mi
+
