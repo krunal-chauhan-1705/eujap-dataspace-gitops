@@ -149,7 +149,7 @@ controlplane:
     ## Private / Intranet facing Ingress
     - enabled: true
       # -- The hostname to be used to precisely map incoming traffic onto the underlying network service
-      hostname: "toyota-controlplane.tx.the-sense.io"
+      hostname: "toyota-controlplane.dataspace.smartsenselabs.com"
       # -- Additional ingress annotations to add
       annotations: {}
       # -- EDC endpoints exposed by this ingress resource
@@ -266,7 +266,7 @@ dataplane:
     ## Public / Internet facing Ingress
     - enabled: true
       # -- The hostname to be used to precisely map incoming traffic onto the underlying network service
-      hostname: "toyota-dataplane.tx.the-sense.io"
+      hostname: "toyota-controlplane.dataspace.smartsenselabs.com"
       # -- Additional ingress annotations to add
       annotations: {}
       # -- EDC endpoints exposed by this ingress resource
