@@ -230,7 +230,7 @@ provisioning:
     port: 3001
   env:
     PORT: "3001"
-    BACKEND_URL: "http://eu-jap-hack-backend:8000/api"
+    BACKEND_URL: "http://eujap-eu-jap-hack-backend:8000/api"
     POSTGRES_ADMIN_URL: "postgresql://<path:k8s-stack/data/eujap/postgres#postgres-admin-user>:<path:k8s-stack/data/eujap/postgres#postgres-admin-password>@postgres.postgres.svc.cluster.local:5432/postgres"
     VAULT_ADDR: "https://vault.the-sense.io"
     VAULT_TOKEN: "<path:k8s-stack/data/eujap/provisioning#vault-provisioning-token>"
