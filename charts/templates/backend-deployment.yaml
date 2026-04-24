@@ -52,5 +52,3 @@ spec:
               port: 8000
             initialDelaySeconds: 60
             periodSeconds: 30
-          resources:
-            {{- toYaml .Values.backend.resources | nindent 12 }}
