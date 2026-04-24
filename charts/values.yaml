@@ -47,9 +47,9 @@ backend:
     CADDE_PARTNER_EDC_DSP_URL: "https://toyota-protocol.dataspace.smartsenselabs.com/api/v1/dsp"
     CADDE_PARTNER_EDC_BPN: "BPNL00000000024R"
     PROVISIONING_SERVICE_URL: "http://eujap-eu-jap-hack-provisioning:3001"
-    WALTID_ISSUER_URL: "http://eujap-eu-jap-hack-waltid-issuer:7002"
-    WALTID_WALLET_URL: "http://eujap-eu-jap-hack-waltid-wallet:7001"
-    WALTID_VERIFIER_URL: "http://eujap-eu-jap-hack-waltid-verifier:7003"
+    WALTID_ISSUER_URL: "http://eujap-eu-jap-hack-waltid-issuer.default.svc.cluster.local:7002"
+    WALTID_WALLET_URL: "http://eujap-eu-jap-hack-waltid-wallet.default.svc.cluster.local:7001"
+    WALTID_VERIFIER_URL: "http://eujap-eu-jap-hack-waltid-verifier.default.svc.cluster.local:7003"
 
 keycloak:
   enabled: true
