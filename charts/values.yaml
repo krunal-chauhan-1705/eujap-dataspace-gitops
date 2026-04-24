@@ -226,7 +226,14 @@ waltidIssuerApi:
   service:
     port: 7002
   ingress:
-    host: "jeh-waltid-issuer.dataspace.smartsenselabs.com"
+    host: "jeh-waltid-issuer.dataspace.smartsenselabs.com"  
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
 
 
 waltidVerifierApi:
@@ -240,4 +247,12 @@ waltidVerifierApi:
     port: 7003
   ingress:
     host: "jeh-waltid-verifier.dataspace.smartsenselabs.com"
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
 
