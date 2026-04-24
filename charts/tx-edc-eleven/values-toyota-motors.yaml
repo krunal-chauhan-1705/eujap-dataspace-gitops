@@ -8,10 +8,10 @@ participant:
   id: "BPNL00000000024R"
 iatp:
   # -- Decentralized IDentifier (DID) of the connector
-  id: "did:web:portal-backend.tx.the-sense.io:api:administration:staticdata:did:BPNL00000000024R"
+  id: "did:web:portal-backend.dataspace.smartsenselabs.com:api:administration:staticdata:did:BPNL00000000024R"
   # -- Configures the trusted issuers for this runtime
   trustedIssuers:
-    - "did:web:portal-backend.tx.the-sense.io:api:administration:staticdata:did:BPNL00000003CRHK"
+    - "did:web:portal-backend.dataspace.smartsenselabs.com:api:administration:staticdata:did:BPNL00000003CRHK"
   sts:
     dim:
       # -- URL where connectors can request SI tokens
@@ -125,7 +125,7 @@ controlplane:
     ## Public / Internet facing Ingress
     - enabled: true
       # -- The hostname to be used to precisely map incoming traffic onto the underlying network service
-      hostname: "toyota-protocol.tx.the-sense.io"
+      hostname: "toyota-protocol.dataspace.smartsenselabs.com"
       # -- Additional ingress annotations to add
       annotations: {}
       # -- EDC endpoints exposed by this ingress resource
