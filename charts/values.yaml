@@ -11,7 +11,7 @@ tls:
   clusterIssuer: letsencrypt-prod
 
 backend:
-  replicaCount: 0
+  replicaCount: 1
   image:
     repository: eu-jap-hack/backend
     tag: "1.0.41"
