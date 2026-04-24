@@ -208,7 +208,7 @@ waltidWalletApi:
   image:
     registry: docker.io
     repository: waltid/wallet-api
-    tag: "latest"
+    tag: "0.18.2"
     pullPolicy: IfNotPresent
   service:
     port: 7001
@@ -221,7 +221,7 @@ waltidIssuerApi:
   image:
     registry: docker.io
     repository: waltid/issuer-api
-    tag: "latest"
+    tag: "0.18.2"
     pullPolicy: IfNotPresent
   service:
     port: 7002
@@ -241,7 +241,7 @@ waltidVerifierApi:
   image:
     registry: docker.io
     repository: waltid/verifier-api
-    tag: "latest"
+    tag: "0.18.2"
     pullPolicy: IfNotPresent
   service:
     port: 7003
