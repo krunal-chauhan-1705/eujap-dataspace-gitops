@@ -8,10 +8,10 @@ participant:
   id: "BPNL000000000342"
 iatp:
   # -- Decentralized IDentifier (DID) of the connector
-  id: "did:web:portal-backend.dataspace.smartsenselabs.com:api:administration:staticdata:did:BPNL000000000342"
+  id: "did:web:portal-backend.tx.the-sense.io:api:administration:staticdata:did:BPNL000000000342"
   # -- Configures the trusted issuers for this runtime
   trustedIssuers:
-    - "did:web:portal-backend.dataspace.smartsenselabs.com:api:administration:staticdata:did:BPNL00000003CRHK"
+    - "did:web:portal-backend.tx.the-sense.io:api:administration:staticdata:did:BPNL00000003CRHK"
   sts:
     dim:
       # -- URL where connectors can request SI tokens
