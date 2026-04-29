@@ -88,7 +88,7 @@ controlplane:
     cache_validity_seconds: 600
     server:
       # -- URL of the BPN/DID Resolution Service
-      url: https://bdrs.dataspace.smartsenselabs.com/api/directory
+      url: https://bdrs.tx.the-sense.io/api/directory
   # -- configuration for the built-in federated catalog crawler
   catalog:
     # -- Flag to globally enable/disable the FC feature
