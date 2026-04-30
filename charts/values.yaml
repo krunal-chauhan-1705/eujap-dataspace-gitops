@@ -60,7 +60,7 @@ backend:
 
 keycloak:
   enabled: true
-  replicaCount: 0
+  replicaCount: 1
   image:
     repository: eu-jap-hack/keycloak
     tag: "1.2.0"
