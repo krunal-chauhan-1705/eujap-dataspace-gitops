@@ -11,7 +11,7 @@ tls:
   clusterIssuer: letsencrypt-prod
 
 backend:
-  replicaCount: 1
+  replicaCount: 0
   image:
     repository: eu-jap-hack/backend
     tag: "1.2.0"
@@ -60,7 +60,7 @@ backend:
 
 keycloak:
   enabled: true
-  replicaCount: 1
+  replicaCount: 0
   image:
     repository: eu-jap-hack/keycloak
     tag: "1.2.0"
